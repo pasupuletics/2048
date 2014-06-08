@@ -291,7 +291,6 @@ Game2048.gameModule.service('game2048Service', [function() {
 
 		}
 
-		console.log(JSON.stringify(retArray));
 		return retArray;
 
 
@@ -301,9 +300,21 @@ Game2048.gameModule.service('game2048Service', [function() {
 	function initialize(){
 		//return a pseudo random state
 
+		var possibleValues = [2,4],
+			m,n,i;
+
+
+
 		initialized = true;
-		grids[0][0].value = 2;
-		grids[0][1].value = 2; 
+	
+		for( i = 0; i < 2; i++){
+			m = Math.round(Math.random() * 3);
+			n = Math.round(Math.random() * 3);
+
+			grids[m][n].value = possibleValues[Math.round(Math.random() * 1)];	
+		}	
+		 	
+		
 	
 		return grids;
 	}
