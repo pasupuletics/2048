@@ -11,11 +11,15 @@ Game2048.gameModule.controller('gameCtrl',['$scope','game2048Service',function($
 			$scope.grids = game2048Service.getState(dir);
 		}
 
+		// Key event handler re-used from http://plnkr.co/edit/rwUDTtkQkaQ0dkIFflcy?p=preview
+
 		$scope.$on('keydown', function( msg, code ) {
-		$scope.keys.forEach(function(o) {
-			if ( o.code !== code ) { return; }
-		 		o.action();
-		 		$scope.$apply();
+			$scope.keys.forEach(function(o) {
+				if ( o.code !== code ) { 
+					return; 
+				}
+	 			o.action();
+	 			$scope.$apply();
 			});
 		});
 

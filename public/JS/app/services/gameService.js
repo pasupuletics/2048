@@ -1,5 +1,13 @@
 Game2048.gameModule.service('game2048Service', [function() {
-	var grids = (function(){
+	var grids = [],
+		initialized = false,
+		currentState = [];
+
+
+
+	//initialize the grid array
+
+	grids = (function(){
 		var gridArr =[];
 		for( var m = 0; m < 4 ; m++ ){
 			gridArr.push([]);
@@ -14,18 +22,6 @@ Game2048.gameModule.service('game2048Service', [function() {
 		
 		return gridArr;
 	})();
-
-	function flatten(arr){
-		var resultArr =[];
-		
-		return Array.prototype.concat.apply(resultArr,arr);
-	}
-
-
-
-	var initialized = false;
-	var currentState = [];
-
 
 
 
@@ -46,59 +42,27 @@ Game2048.gameModule.service('game2048Service', [function() {
 		var retArray = [];
 
 		switch(dir){
-			case 'up':
-				console.log('up');
-				//console.log(this.currentState);
-				tempArr.push(processArr(getColumn(this.currentState,0),dir, 0));
-				tempArr.push(processArr(getColumn(this.currentState,1),dir,1));
-				tempArr.push(processArr(getColumn(this.currentState,2),dir,2));
-				tempArr.push(processArr(getColumn(this.currentState,3),dir,3));
-				//console.log(getColumn(this.currentState,0));
-
-				retArray = reOrderArray(tempArr);
-
-				retArray = randomInsert(retArray);
-
-				this.currentState = retArray;
-
-				//console.log(retArray);
-
-				break;
-
+			case 'up':   /* intentional fall through */
 			case 'down':
-				console.log('down');
-				tempArr.push(processArr(getColumn(this.currentState,0),dir, 0));
-				tempArr.push(processArr(getColumn(this.currentState,1),dir,1));
-				tempArr.push(processArr(getColumn(this.currentState,2),dir,2));
-				tempArr.push(processArr(getColumn(this.currentState,3),dir,3));
-				
+
+				for( var i = 0; i < 4; i++){
+					tempArr.push(processArr(getColumn(this.currentState,i),dir, i));
+				}
+
 				retArray = reOrderArray(tempArr);
 				retArray = randomInsert(retArray);
-
 				this.currentState = retArray;
+
 				break;
 
 			case 'right':
-				console.log('right');
-				tempArr.push(processArr(getRow(this.currentState,0),dir,0));
-				tempArr.push(processArr(getRow(this.currentState,1),dir,1));
-				tempArr.push(processArr(getRow(this.currentState,2),dir,2));
-				tempArr.push(processArr(getRow(this.currentState,3),dir,3));
+			case 'left':  /* intentional fallthrough */
+				
+				for( i = 0; i < 4; i++){
+					tempArr.push(processArr(getRow(this.currentState,i),dir,i));
+				}
+
 				retArray = randomInsert(tempArr);
-
-				this.currentState = retArray;
-
-
-				break;
-
-			case 'left':
-				console.log('left');
-				tempArr.push(processArr(getRow(this.currentState,0),dir,0));
-				tempArr.push(processArr(getRow(this.currentState,1),dir,1));
-				tempArr.push(processArr(getRow(this.currentState,2),dir,2));
-				tempArr.push(processArr(getRow(this.currentState,3),dir,3));
-				retArray = randomInsert(tempArr);
-
 				this.currentState = retArray;
 				break;
 
@@ -126,7 +90,7 @@ Game2048.gameModule.service('game2048Service', [function() {
 
 		function getColumn( arr, columnNumber){
 			var retArr =[];
-			$.each(flatten(arr),function(index,value){
+			$.each(_.flatten(arr),function(index,value){
 				if(value.n === columnNumber){
 					retArr.push(value)
 				}
@@ -262,7 +226,7 @@ Game2048.gameModule.service('game2048Service', [function() {
 
 					retArr = _.filter(retArr, function(item){ return item.value !== 0 });
 
-					var len =  4 - retArr.length
+					var len =  4 - retArr.length;
 
 					for(i = 0; i < len  ; i++){
 
@@ -346,7 +310,7 @@ Game2048.gameModule.service('game2048Service', [function() {
 
 	return {
 		getState : function(dir){
-			return flatten(getNextState(dir));
+			return _.flatten(getNextState(dir));
 		}
 	}
 
