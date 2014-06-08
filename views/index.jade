@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  link(rel="stylesheet" href="CSS/bootstrap.css")
+  .game-container
+    .game-controller(ng-controller="gameCtrl" class="clearfix" )
+      div(ng-repeat="item in grids" ng-class="getClass(item.value)" class="grid-item")
+        span.num(ng-bind="item.value" ng-show="item.value !== 0" ng-class="getDigits(item.value)") 
+
+  
+
+  script(src="JS/lib/jquery.js")
+  script(src="JS/lib/underscore.js")
+  script(src="JS/lib/angular.js")
+  script(src="JS/app/app.js")
